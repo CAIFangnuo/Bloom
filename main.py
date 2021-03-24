@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 
 import NN
 import CNN
+import Word_Specificity
 
 mappings = {'🗓':'anticipation', '🤞':'anticipation', '😡':'colère', '🤬':'colère', '👿':'colère', '😾':'colère',
            '🖕':'colère', '😤':'colère', '😠':'colère', '💪':'confiance', '🤝':'confiance', '👍':'confiance',
@@ -89,5 +90,9 @@ if __name__ == '__main__':
     
     #F, thresholds, train_precisions, train_recalls = Word_Specificity.train(X_train, y_train, X, y, content, mlb.classes_)
     #test_precisions, test_recalls = Word_Specificity.test(X_test, y_test, y, F, mlb.classes_, thresholds)
+	
+		
+        
+        
         
         
