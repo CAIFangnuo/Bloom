@@ -46,9 +46,10 @@ if __name__ == '__main__':
     X = pd.Series([simple_preprocess(x, deacc=True) for x in content_with_emojis])
     mlb = MultiLabelBinarizer()
     y = mlb.fit_transform(emotions)
-           
+    
     #training
     for label,e in enumerate(mlb.classes_):
+        print("emtion:{}".format(e))
         if np.mean(y[:,i]==1) > 0.5:
             idx0 = np.array(X[y[:,label]==0].index)
             idx1 = np.random.choice(np.array(X[y[:,label]!=0].index), len(X[y[:,label]==0]), replace=False)
@@ -58,7 +59,13 @@ if __name__ == '__main__':
             
         idx = np.concatenate((idx0,idx1))
         np.random.shuffle(idx)
-   
+
         X_train, X_test, y_train, y_test = train_test_split(X[idx], y[idx,label], test_size=0.2, random_state=0)
-    
-        NN.train(X_train, y_train)
+        
+        #using classical neural networks
+        threshold, train_precision, train_recall = NN.train(X_train, y_train)       
+        test_precision, test_recall = NN.test(X_test, y_test, threshold)
+        
+        #using convolutional neural networks
+        threshold, train_precision, train_recall = CNN.train(X_train, y_train)       
+        test_precision, test_recall = CNN.test(X_test, y_test, threshold)
