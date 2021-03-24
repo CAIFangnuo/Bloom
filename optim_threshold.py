@@ -4,7 +4,7 @@ import pandas as pd
 
 def optim_threshold(y_pred, y_train):
     df_train = pd.DataFrame({"proba":y_pred,"label":y_train})
-    thresholds = np.linspace(0.1,1,101)
+    thresholds = np.linspace(0,1,101)
     precisions = []
     recalls = []
     for threshold in thresholds:
