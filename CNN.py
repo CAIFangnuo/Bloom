@@ -8,6 +8,7 @@ from tensorflow.keras import layers
 
 import optim_threshold
 
+#max length for padding
 max_len = 20
 
 def vec_concatenate(tokens, embedding):
