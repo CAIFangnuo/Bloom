@@ -1,3 +1,10 @@
+import pandas as pd
+import numpy as np
+from gensim.utils import simple_preprocess
+from tqdm.notebook import tqdm
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.model_selection import train_test_split
+
 mappings = {'🗓':'anticipation', '🤞':'anticipation', '😡':'colère', '🤬':'colère', '👿':'colère', '😾':'colère',
            '🖕':'colère', '😤':'colère', '😠':'colère', '💪':'confiance', '🤝':'confiance', '👍':'confiance',
            '👌':'confiance', '😒':'déception', '👎':'déception', '😞':'déception', '🙄':'déception', '😖':'déception',
@@ -22,6 +29,18 @@ def preprocessing_with_emojis(file_name):
     emotions = [list(set(x[1])) for x in content_emotions]
     content = [x[0] for x in content_emotions]
     return content, emotions
-  
-  
+
+
+
 if __name__ == '__main__':
+    content_with_emojis = []
+    emotions_with_emojis = []
+    for project in tqdm(['DANONE','FLYING_BLUE','NESPRESSO','SANOFI']):
+        file_name = "{}.csv".format(project)
+        data = preprocessing_with_emojis(file_name)
+        content_with_emojis += data[0]
+        emotions_with_emojis += data[1]
+    emotions = [list(set([e[1] for e in x])) for x in emotions_with_emojis]
+    X = pd.Series([simple_preprocess(x, deacc=True) for x in content_with_emojis])
+    mlb = MultiLabelBinarizer()
+    y = mlb.fit_transform(emotions)
