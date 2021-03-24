@@ -48,7 +48,7 @@ if __name__ == '__main__':
     mlb = MultiLabelBinarizer()
     y = mlb.fit_transform(emotions)
     
-    #training
+    #training for NN and CNN approach
     Nets = {}
     train_precisions = {}
     train_recalls = {}
@@ -82,7 +82,12 @@ if __name__ == '__main__':
         train_recalls[e] = train_recall
         test_precisions[e] = test_precision
         test_recalls[e] = test_recall
-        
-        
+    
+    #training for Word Specificity approach
+    #content = [' '.join(simple_preprocess(x, deacc=True)) for x in content_with_emojis]
+    #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    
+    #F, thresholds, train_precisions, train_recalls = Word_Specificity.train(X_train, y_train, X, y, content, mlb.classes_)
+    #test_precisions, test_recalls = Word_Specificity.test(X_test, y_test, y, F, mlb.classes_, thresholds)
         
         
