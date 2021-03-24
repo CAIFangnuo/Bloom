@@ -5,6 +5,8 @@ from tqdm.notebook import tqdm
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.model_selection import train_test_split
 
+import NN
+
 mappings = {'🗓':'anticipation', '🤞':'anticipation', '😡':'colère', '🤬':'colère', '👿':'colère', '😾':'colère',
            '🖕':'colère', '😤':'colère', '😠':'colère', '💪':'confiance', '🤝':'confiance', '👍':'confiance',
            '👌':'confiance', '😒':'déception', '👎':'déception', '😞':'déception', '🙄':'déception', '😖':'déception',
@@ -44,3 +46,19 @@ if __name__ == '__main__':
     X = pd.Series([simple_preprocess(x, deacc=True) for x in content_with_emojis])
     mlb = MultiLabelBinarizer()
     y = mlb.fit_transform(emotions)
+           
+    #training
+    for label,e in enumerate(mlb.classes_):
+        if np.mean(y[:,i]==1) > 0.5:
+            idx0 = np.array(X[y[:,label]==0].index)
+            idx1 = np.random.choice(np.array(X[y[:,label]!=0].index), len(X[y[:,label]==0]), replace=False)
+        else:
+            idx0 = np.random.choice(np.array(X[y[:,label]!=1].index), len(X[y[:,label]==1]), replace=False)
+            idx1 = np.array(X[y[:,label]==1].index)
+            
+        idx = np.concatenate((idx0,idx1))
+        np.random.shuffle(idx)
+   
+        X_train, X_test, y_train, y_test = train_test_split(X[idx], y[idx,label], test_size=0.2, random_state=0)
+    
+        NN.train(X_train, y_train)
