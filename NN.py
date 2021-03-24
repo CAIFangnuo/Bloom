@@ -60,7 +60,7 @@ def train(X_train, y_train):
     return threshold, train_precision, train_recall
 
 
-def test(X_test, y_test):
+def test(X_test, y_test, threshold):
 
     X_test_vector = X_test.apply(lambda x: buildWordVector(x))
     X_test_vector = np.array(X_test_vector.tolist())
@@ -70,6 +70,13 @@ def test(X_test, y_test):
     df_test['pred'] = np.where(df_test['proba']>threshold,1,0)
     test_precision = np.mean(df_test[df_test['pred']==1]['label']==1)
     test_recall = np.mean(df_test[df_test['label']==1]['pred']==1)
+    
+    for item in sorted(df_test['label'].unique()):
+        sns.distplot((df_test[df_test['label']==item]['proba']),label=item)
+    plt.axvline(x=threshold, c='g',label='cut')
+    plt.legend()
+    plt.title("anticipation (Tfidf + Neural Networks)")
+    plt.show()
     
     return test_precision, test_recall
   
